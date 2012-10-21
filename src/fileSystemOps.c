@@ -21,7 +21,7 @@ Description: It creates a file system with the specified name and specified
              size.
 Parameters: It takes two parameters
             1)vfsLabel, which is the name of the VFS
-            2)size, which is the size of the VFS ( in bytes )
+            2)size, which is the size of the VFS ( in kilobytes )
 Return Type: void
 */
 void create_vfs(const char *vfsLabel,unsigned int ui_size){
@@ -48,17 +48,11 @@ void create_vfs(const char *vfsLabel,unsigned int ui_size){
          exit(1);
     }
 
-    /*
-      If the size is not specified in bytes then, write the logic to convert
-      the given size into bytes.
-
-      Business Logic To Convert Size which is not specified in bytes to bytes
-
-    */
-
+    /* Convert the file size into bytes */
+    ui_size = ui_size * 1024;
+    
     /* Total Blocks is total size divided by size of each block when size is in bytes */
     s_superBlock.ui_totalBlocks = ui_size/VFS_BLOCKSIZE;
-
 
     /* Validation Check If the file pointer can move to the end of the file or not */
     if((fseek(fpVfs,(long)s_superBlock.ui_totalBlocks*VFS_BLOCKSIZE,SEEK_SET)) == -1){
@@ -83,7 +77,7 @@ void create_vfs(const char *vfsLabel,unsigned int ui_size){
     /* 
        Initialize the superblock structure with the appropriate values and
        store it at Data Block 0 of the file system.
-       */
+    */
     strcpy(s_superBlock.c_fileSystemLabel,vfsLabel);
     s_superBlock.ui_uniqueNo = VFS_UNIQUE_FILE_SYSTEM_NO;
        
@@ -123,7 +117,7 @@ void create_vfs(const char *vfsLabel,unsigned int ui_size){
     s_inode.c_fileType[0]='d';
     s_inode.c_fileType[1]='\0';
     s_inode.ui_inodeNo = 4;
-    s_inode.ui_fileSize = VFS_BLOCKSIZE;
+    s_inode.ui_fileSize = sizeof(struct fileDescriptor);
     s_inode.ui_locationDataBlockNo[0] = s_superBlock.ui_startBlockNoOfDataBlockArray;
     
     if((fseek(fpVfs,VFS_INODE_STARTBLOCK*VFS_BLOCKSIZE+2*VFS_BLOCKSIZE,SEEK_SET))==-1){
@@ -153,6 +147,17 @@ void create_vfs(const char *vfsLabel,unsigned int ui_size){
     if((i_retVal=fwrite(&s_dientry,sizeof(struct directoryEntry),1,fpVfs)) != 1){
          printf("ERROR: Error In Writing Directory Entry \n");
     }
+    s_inode.ui_fileSize = s_inode.ui_fileSize + sizeof(struct directoryEntry);
+
+    /* Rewrite the root Inode, after modifying the size of the file */    
+    if((fseek(fpVfs,VFS_INODE_STARTBLOCK*VFS_BLOCKSIZE+2*VFS_BLOCKSIZE,SEEK_SET))==-1){
+         printf("ERROR: Error In Creating Root Inode \n");
+         printf("STATUS: Root Directory Could Not Initialized \n");
+    }
+
+    if((i_retVal=fwrite(&s_inode,sizeof(struct fileDescriptor),1,fpVfs)) != 1){
+         printf("ERROR: Could not write the '/' information to the data block \n");
+    }
 
     /* Initialize the lost+found directory */
     memset((void *)&s_inode,0,sizeof(struct fileDescriptor));
@@ -161,7 +166,7 @@ void create_vfs(const char *vfsLabel,unsigned int ui_size){
     s_inode.c_fileType[0]='d';
     s_inode.c_fileType[1]='\0';
     s_inode.ui_inodeNo = 5;
-    s_inode.ui_fileSize = VFS_BLOCKSIZE;
+    s_inode.ui_fileSize = sizeof(struct fileDescriptor);
     s_inode.ui_locationDataBlockNo[0] = s_superBlock.ui_startBlockNoOfDataBlockArray + 1;
 
     if((fseek(fpVfs,VFS_INODE_STARTBLOCK*VFS_BLOCKSIZE+3*VFS_BLOCKSIZE,SEEK_SET))==-1){
@@ -250,31 +255,10 @@ void create_vfs(const char *vfsLabel,unsigned int ui_size){
               i++;
          }
          printf("\n");
-         if((i_retVal=fread(&s_dientry,sizeof(struct directoryEntry),1,fpVfs)) != 1){
-              printf("DEBUG: Error in reading dientry. \n");
-         }
-         printf("          %d      ",s_dientry.ui_inodeNo);
-         i = 0;
-         while(s_dientry.c_fileName[i] != '\0'){
-              printf("%c",s_dientry.c_fileName[i]);
-              i++;
-         }
-         printf("\n");
-         if((i_retVal=fread(&s_dientry,sizeof(struct directoryEntry),1,fpVfs)) != 1){
-              printf("DEBUG: Error in reading dientry. \n");
-         }
-         printf("          %d      ",s_dientry.ui_inodeNo);
-         i = 0;
-         while(s_dientry.c_fileName[i] != '\0'){
-              printf("%c",s_dientry.c_fileName[i]);
-              i++;
-         }
-         printf("\n");
+         
     }
-    
 #endif
-    
-       fclose(fpVfs);
+    fclose(fpVfs);
 }
 
 
@@ -294,8 +278,6 @@ void mount_vfs(const char *vfsLabel){
     struct freeList *s_inodeBlockFreeList;
 
     struct nAryTreeNode *sPtr_rootNAryTree = NULL;
-
-    struct hashBucket *hashTable[NOOFBUCKETS];
 
     int i_retVal = 0;
 
@@ -327,13 +309,13 @@ void mount_vfs(const char *vfsLabel){
     /* Load the file system into the n-Ary Tree */
     sPtr_rootNAryTree = s_loadFileSystem(VFS_ROOT_INODE,fpVfs,sPtr_superBlock);
 #if DEBUG
-    printf("Root Pointer : %d \n",sPtr_rootNAryTree->s_inode->ui_inodeNo);
+    printf("DEBUG: Root Pointer : %d \n",sPtr_rootNAryTree->s_inode->ui_inodeNo);
     v_traverseNAryTree(sPtr_rootNAryTree);
     s_dataBlockFreeList++;
     s_inodeBlockFreeList++;
 #endif
-       
+ /*      
     v_initializeHashTable(hashTable);
     v_loadHashTable(hashTable,sPtr_rootNAryTree);
-
+*/
 }

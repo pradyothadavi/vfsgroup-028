@@ -1,0 +1,2 @@
+createvfs demo 1024
+mountvfs demo
