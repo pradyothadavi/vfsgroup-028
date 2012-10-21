@@ -215,7 +215,7 @@ void v_traverseNAryTree(struct nAryTreeNode *ptrToANode){
     } else {
          v_traverseNAryTree(temp->leftChild);
 #if DEBUG
-    printf("FD No : %d ",temp->s_inode->ui_inodeNo);
+    printf("DEBUG: FD No : %d \n",temp->s_inode->ui_inodeNo);
 #endif
          v_traverseNAryTree(temp->rightSibling);
     }
