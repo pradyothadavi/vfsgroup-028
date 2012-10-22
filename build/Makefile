@@ -4,7 +4,7 @@ CC	=	gcc
 
 CFLAGS	=	-g -I$(VFSDIR)/include -Wall -Werror -ansi -pedantic
 
-OBJS	=	$(VFSDIR)/src/main.o $(VFSDIR)/src/block.o $(VFSDIR)/src/fileDescriptor.o $(VFSDIR)/src/mainHeader.o $(VFSDIR)/src/freeList.o $(VFSDIR)/src/fileSystemOps.o $(VFSDIR)/src/nAryTree.o
+OBJS	=	$(VFSDIR)/src/main.o $(VFSDIR)/src/block.o $(VFSDIR)/src/fileDescriptor.o $(VFSDIR)/src/mainHeader.o $(VFSDIR)/src/freeList.o $(VFSDIR)/src/fileSystemOps.o $(VFSDIR)/src/nAryTree.o $(VFSDIR)/src/hashTable.o
 
 TARGET	=	myVfs_exe
 

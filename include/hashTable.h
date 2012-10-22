@@ -8,15 +8,22 @@ Version No: 1.0
 
 #define NOOFBUCKETS 26
 
-struct hashBucket{
+struct chain{
     char c_fileName[VFS_NAMELEN];
     int i_inodeNo;
-    struct hashBucket *next;
+    struct chain *next;
 };
 
+extern struct chain *hashTable;
+v_initializeHashTable();
 
-v_initializeHashTable(struct hashBucket *);
+v_loadHashTable(unsigned int inode,char[] fileName);
 
-v_loadHashTable(struct hashBucket *,struct nAryTreeNode *);
+i_calculateIndex(char[] fileName);
+
+struct chain* searchHashTable(char fileArray[]);
+
+void delete(int iNode,char fileArray[]);
+
 
 #endif
