@@ -6,7 +6,7 @@ Group No : 28
 Version No : 1.0
 */
 
-/* This header file has the datatype definitions for the FreeList */
+/* This header file has the datatype definitions for the BST */
 
 #include "fileDescriptor.h"
 
