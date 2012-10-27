@@ -12,4 +12,6 @@ Version No : 1.0
 
 #define FILE_CHARACTERS 2
 
+#define VFS_NAMELEN 255
+
 #endif

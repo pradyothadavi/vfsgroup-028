@@ -1,6 +1,6 @@
 #ifndef _HASH_TABLE_
 #define _HASH_TABLE_
-
+#include "fileSystemOps.h"
 /*
 Group No: 028
 Version No: 1.0
@@ -14,12 +14,12 @@ struct chain{
     struct chain *next;
 };
 
-extern struct chain *hashTable;
-v_initializeHashTable();
+extern struct chain *hashTableBucket[26];
+void v_initializeHashTable();
 
-v_loadHashTable(unsigned int inode,char[] fileName);
+void v_loadHashTable(unsigned int inode,char fileName[]);
 
-i_calculateIndex(char[] fileName);
+int i_calculateIndex(char fileName[]);
 
 struct chain* searchHashTable(char fileArray[]);
 
