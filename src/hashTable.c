@@ -1,4 +1,9 @@
 #include "hashTable.h"
+#include<malloc.h>
+#include<string.h>
+#include<stdlib.h>
+#include<stdio.h>
+#include<ctype.h>
 
 /*
 Function Name: v_initializeHashTable
@@ -9,8 +14,8 @@ Return Type: It returns void
 void v_initializeHashTable(){
 		int j;
 		for(j=0;j<26;j++){
-		hashTable[j]=(struct chain *)malloc(sizeof(struct chain)*1);
-		hashTable[j]->next=NULL;
+		hashTableBucket[j]=(struct chain *)malloc(sizeof(struct chain)*1);
+		hashTableBucket[j]->next=NULL;
 		
 		}
 }
@@ -22,31 +27,33 @@ Description: It loads the hash table with all the files in the file system using
 Parameters: It takes inode number and fileName as input
 Return Type: It return's void
 */
-void v_loadHashTable(unsigned int inode,char[] fileArray){
+void v_loadHashTable(unsigned int iNode,char fileArray[]){
 
-	int index=calculateIndex(fileArray);
+	int index=0;
 	struct chain *newNode;
 	
         struct chain *temp;
+	index=i_calculateIndex(fileArray);
 	
-	if(hashTable[index]->next==NULL){
+	
+	if(hashTableBucket[index]->next==NULL){
 	
 		newNode=(struct chain*)malloc(sizeof(struct chain));
 		strcpy(newNode->c_fileName,fileArray);
 		newNode->i_inodeNo=iNode;
 		newNode->next=NULL;	
 	
-		hashTable[index]->next=newNode;
+		hashTableBucket[index]->next=newNode;
 
 	}
-	else if (hashTable[index]->next!=NULL){
+	else if (hashTableBucket[index]->next!=NULL){
 		
 		newNode=(struct chain*)malloc(sizeof(struct chain));
 		strcpy(newNode->c_fileName,fileArray);
 		newNode->i_inodeNo=iNode;
                 newNode->next=NULL;
 		
-		temp=hashTable[index]->next;
+		temp=hashTableBucket[index]->next;
 		while(temp->next!=NULL)
 			temp=temp->next;
 		temp->next=newNode;
@@ -63,12 +70,16 @@ void v_loadHashTable(unsigned int inode,char[] fileArray){
                        i) two parameters index, file name*/
 }
 
-int calculateIndex(char[] fileArray){
+int i_calculateIndex(char fileArray[]){
 			char *fileName;
+			char firstChar;
+			int index=0;
 			fileName=fileArray;
 			firstChar=*fileName;
-			index=toascii(firstChar)-97;
-			//insertFile(hashTable,index-97,fileArray);	
+			index=toascii(firstChar);
+			index=index-97;
+			return index;
+				
 }
 
 
@@ -81,15 +92,15 @@ Return Type: It returns a linked list of files with the name to be searched
 */
 
 struct chain* searchHashTable(char fileArray[]){
-	int index=calculateIndex(fileArray);
-
-	struct chain *p=hashTable[index]->next;
+	int index=i_calculateIndex(fileArray);
+	int i=0;
+	struct chain *p=hashTableBucket[index]->next;
 	struct chain *head=(struct chain*)malloc(sizeof(struct chain));
 	struct chain *newNode;
 	head->next=NULL;
 	head=NULL;
-	int i;
-	if(hashTable[index]->next->c_fileName==NULL){
+	
+	if(hashTableBucket[index]->next->c_fileName==NULL){
 		printf("File not found !!! \n");	
 		
 		return head;
@@ -131,12 +142,12 @@ Return Type: It does not return anything
 
 void v_delete(int iNode,char fileArray[]){
 
-	int index=calculateIndex(fileArray);
+	int index=i_calculateIndex(fileArray);
 	int j;
 	
-	struct chain *start=hashTable[index]->next;
-	struct chain *previous=hashTable[index];
-	if(hashTable[index]->next->c_fileName==NULL){
+	struct chain *start=hashTableBucket[index]->next;
+	struct chain *previous=hashTableBucket[index];
+	if(hashTableBucket[index]->next->c_fileName==NULL){
 		printf("No file with this name!!!\n");
 		return;
 	}
