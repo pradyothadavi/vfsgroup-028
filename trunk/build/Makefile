@@ -2,7 +2,7 @@ VFSDIR	=	..
 
 CC	=	gcc
 
-CFLAGS	=	-g -I$(VFSDIR)/include -Wall -Werror -ansi -pedantic
+CFLAGS	=	-g -I$(VFSDIR)/include -ansi -pedantic
 
 OBJS	=	$(VFSDIR)/src/main.o $(VFSDIR)/src/block.o $(VFSDIR)/src/fileDescriptor.o $(VFSDIR)/src/mainHeader.o $(VFSDIR)/src/freeList.o $(VFSDIR)/src/fileSystemOps.o $(VFSDIR)/src/nAryTree.o $(VFSDIR)/src/hashTable.o
 
@@ -19,5 +19,5 @@ $(OBJS) : %.o : %.c
 all: myVfs_exe
 
 clean:
-	rm -f $(VFSDIR)/bin/*.o core $(VFSDIR)/bin/$(TARGET)
+	rm -f $(VFSDIR)/bin/*.o core $(VFSDIR)/src/*.o core $(VFSDIR)/bin/$(TARGET)
 
