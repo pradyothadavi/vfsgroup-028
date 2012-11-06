@@ -27,9 +27,9 @@ Version No : 1.0
 /* Pointers to different data structures, which will be used by most of the
    modules which execute different commands.
 */
-extern struct nAryTreeNode *sPtr_rootNAryTree; /* Pointer to n-Ary Tree */
-extern struct freeList *s_dataBlockFreeList;/*Pointer to free data blockList*/
-extern struct freeList *s_inodeBlockFreeList;/*Pointer to free inode blockList*/
+struct nAryTreeNode *sPtr_rootNAryTree = NULL; /* Pointer to n-Ary Tree */
+struct freeList *s_dataBlockFreeList = NULL;/*Pointer to free data blockList*/
+struct freeList *s_inodeBlockFreeList = NULL;/*Pointer to free inode blockList*/
 
 /*
 Function Name: create_vfs
@@ -342,6 +342,6 @@ void mount_vfs(const char *vfsLabel){
 #endif
 
     v_initializeHashTable();
-    v_loadHashTable(sPtr_rootNAryTree);
+    v_populateDataStructures(sPtr_rootNAryTree);
 
 }

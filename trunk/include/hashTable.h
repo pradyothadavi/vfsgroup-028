@@ -14,7 +14,6 @@ struct chain{
     struct chain *next;
 };
 
-extern struct chain *hashTableBucket[26];
 void v_initializeHashTable();
 
 void v_loadHashTable(unsigned int inode,char fileName[]);

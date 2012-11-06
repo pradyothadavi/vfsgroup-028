@@ -224,36 +224,6 @@ void v_traverseNAryTree(struct nAryTreeNode *ptrToANode){
 }
 
 /*
-Function Name: v_traverseNAryTreeAux
-Description: It traverses a n-Ary Tree based on the mode which is passed to it.
-Parameters: It takes 2 parameters
-            1) Pointer to the root of the n-Ary Tree
-            2) Integers value named as mode, which specifies for what the n-Ary
-               Tree is being traversed.
-Return Type: void
-*/
-void v_traverseNAryTreeAux(struct nAryTreeNode *ptrToANode,int i_mode){
-    struct nAryTreeNode *temp = NULL;
-
-    temp = ptrToANode;
-
-    if(NULL == temp){
-         return;
-    } else {
-         v_traverseNAryTreeAux(temp->leftChild,i_mode);
-         if(HASHING == i_mode){
-              if(temp->s_inode->c_fileType[0] == 'r'){
-                   int ui_index = 0;
-                   ui_index = ui_calculateHashIndex(temp->s_inode->cptr_fileName);
-                   v_hashFile(ui_index,temp->s_inode->cptr_fileName,temp->s_inode->ui_inodeNo);
-              }
-         }
-         v_traverseNAryTreeAux(temp->rightSibling,i_mode);
-    }
-
-}
-
-/*
 Function Name: s_searchNAryTreeNode
 Description: It searches for a given file in the n-Ary Tree
 Parameters: It takes 2 parameters
@@ -281,6 +251,33 @@ struct nAryTreeNode *s_searchNAryTreeNode(struct nAryTreeNode *ptrToANode,char *
 }
 
 /*
+Function Name: s_searchNAryTreeNode
+Description: It searches for a given file in the n-Ary Tree
+Parameters: It takes 2 parameters
+            1) Pointer to the root of the n-Ary Tree
+            2) Name of the file to be searched in the n-Ary Tree
+Return Type: It return a pointer to the node if the file is found in the
+             n-Ary Tree else NULL
+*/
+struct nAryTreeNode *s_searchInode_NAryTreeNode(struct nAryTreeNode *ptrToANode,unsigned int ui_inodeNo){
+
+    struct nAryTreeNode *temp = NULL;
+
+    /* Assign temp to the root Node */
+    temp = ptrToANode;
+
+    if( NULL != temp ){
+         if( temp->s_inode->ui_inodeNo == ui_inodeNo ){
+              return temp;
+         }
+         s_searchInode_NAryTreeNode(temp->leftChild,ui_inodeNo);
+         s_searchInode_NAryTreeNode(temp->rightSibling,ui_inodeNo);
+    }
+
+    return temp;
+}
+
+/*
 Function Name: s_getNAryTreeNode
 Description: It creates a node of the type n-Ary Tree
 Parameters: void
@@ -294,4 +291,28 @@ struct nAryTreeNode *s_getNAryTreeNode(){
     temp->s_inode = (struct fileDescriptor *)malloc(sizeof(struct fileDescriptor)*1);
 
     return temp;
+}
+
+/*
+Function Name:
+Description:
+Parameters:
+Return Type:
+*/
+void v_populateDataStructures(struct nAryTreeNode *root){
+
+    struct nAryTreeNode *temp = NULL;
+
+    temp = root;
+
+    if(NULL == temp ){
+         return;
+    } else {
+         v_populateDataStructures(temp->leftChild);
+         /*insert(temp->s_inode);*/
+         if( temp->s_inode->c_fileType[0] == 'r'){
+              v_loadHashTable(temp->s_inode->ui_inodeNo,temp->s_inode->cptr_fileName);
+         }
+         v_populateDataStructures(temp->rightSibling);
+    }
 }
