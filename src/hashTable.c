@@ -90,7 +90,7 @@ int i_calculateIndex(char fileArray[]){
 
 
 /*
-Function Name: l_searchHashTable
+Function Name: searchHashTable
 Description: It searches the hashTable based on the fileName only
 Parameters: It takes fileName as parameter
 Return Type: It returns a linked list of files with the name to be searched
@@ -98,10 +98,10 @@ Return Type: It returns a linked list of files with the name to be searched
 
 struct chain* searchHashTable(char fileArray[]){
 	int index=i_calculateIndex(fileArray);
-	int i=0;
+	int i=1,j=0;
 	struct chain *p=hashTableBucket[index]->next;
 	struct chain *head=(struct chain*)malloc(sizeof(struct chain));
-	struct chain *newNode;
+
 	head->next=NULL;
 	head=NULL;
 	
@@ -112,30 +112,54 @@ struct chain* searchHashTable(char fileArray[]){
 	}
 	else{
 		
-		while(p!=NULL){
 		
-			i=strcmp(p->c_fileName,fileArray);
-			if(i==0){
-
-				newNode=(struct chain*)malloc(sizeof(struct chain));
-				strcpy(newNode->c_fileName,fileArray);
-				if(head==NULL){	
-					head=newNode;
-					
+		while(p!=NULL){
+			for(j=0;j<strlen(fileArray);j++){
+				if(fileArray[j]!=p->c_fileName[j]){
+					i=0;
+					break;
 				}
-				else{
-
-					newNode->next=head;
-				}	head=newNode;
+       				else{
+					i=1;
+				} 
+			}
+			if(i==1){
+				
+				head=addToList(head,p->c_fileName);
 				p=p->next;
 				
 			}
 			else
 				p=p->next;
 		}
+
 	return head;
 	}	
+		
 }
+/*
+Function Name: addToList
+Description: It adds the file to the linked list that has matched the prefix
+Parameters: It takes head of linked list and fileName as input
+Return Type: It returns a linked list of files with the prefix to be searched to search module
+*/
+
+struct chain *addToList(struct chain *head,char fileArray[]){
+	struct chain *newNode;
+	newNode=(struct chain*)malloc(sizeof(struct chain));
+	strcpy(newNode->c_fileName,fileArray);
+	if(head==NULL){	
+			head=newNode;
+					
+	}
+	else{
+
+		newNode->next=head;
+		head=newNode;
+	}
+	return head;
+}
+
 
 /*
 Function Name: v_delete
