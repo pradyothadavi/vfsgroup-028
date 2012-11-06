@@ -310,9 +310,9 @@ void v_populateDataStructures(struct nAryTreeNode *root){
     } else {
          v_populateDataStructures(temp->leftChild);
          /*insert(temp->s_inode);*/
-         if( temp->s_inode->c_fileType[0] == 'r'){
+         
               v_loadHashTable(temp->s_inode->ui_inodeNo,temp->s_inode->cptr_fileName);
-         }
+         
          v_populateDataStructures(temp->rightSibling);
     }
 }
