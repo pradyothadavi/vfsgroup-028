@@ -1,3 +1,11 @@
+/*
+Version No: 1.0
+Application Name: Virtual File System
+*/
+
+/*
+    The file contains the code which is the entry point of the application.
+*/
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -5,7 +13,21 @@
 #include "mainHeader.h"
 #include "limits.h"
 #include "fileSystemOps.h"
+#include "nAryTree.h"
+#include "hashTable.h"
 
+/*
+Function Name: main
+Description: It is the entry point of the application, which calls different 
+             modules based on the command.
+Parameters: It takes 2 parameters from the command line
+            1) No.of.command line arguments
+            2) A file path to a text file, which has all the commands to be 
+               executed.
+Return Type: It return a integer type, to the operating system
+             0 --> If programs exits successfully
+             Greater than 0 --> On abnormal termination
+*/
 int main( int argc, char *argv[] ){
     
     FILE *scriptfp;
@@ -104,10 +126,8 @@ void unmountvfs ( char *P1 )
 	printf("unmountvfs_TO_BE_DONE\n");
 }
 
-void makedir ( char *P1, char *P2 )
-{
-	/* Call the appropriate function with given arguments and display appropriate output on the screen */
-	printf("makedir_TO_BE_DONE\n");
+void makedir ( char *P1, char *P2 ){
+    v_makedir(P1,P2);	
 }
 
 void deletedir ( char *P1 )
