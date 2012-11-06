@@ -1,9 +1,14 @@
-#include "hashTable.h"
+
 #include<malloc.h>
 #include<string.h>
 #include<stdlib.h>
 #include<stdio.h>
 #include<ctype.h>
+
+#include "hashTable.h"
+#include "global.h"
+
+struct chain *hashTableBucket[26];
 
 /*
 Function Name: v_initializeHashTable

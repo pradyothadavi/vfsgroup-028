@@ -29,4 +29,10 @@ struct nAryTreeNode * s_insertNAryTreeNode(struct nAryTreeNode *,struct nAryTree
 
 void v_traverseNAryTree(struct nAryTreeNode *);
 
+struct nAryTreeNode *s_searchInode_NAryTreeNode(struct nAryTreeNode *,unsigned int);
+
+struct nAryTreeNode *s_searchNAryTreeNode(struct nAryTreeNode *,char *);
+
+void v_populateDataStructures(struct nAryTreeNode *);
+
 #endif
