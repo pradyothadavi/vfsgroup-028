@@ -24,5 +24,6 @@ struct chain* searchHashTable(char fileArray[]);
 
 void delete(int iNode,char fileArray[]);
 
+struct chain *addToList(struct chain *head,char fileArray[]);
 
 #endif
