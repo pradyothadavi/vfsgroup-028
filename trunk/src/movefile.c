@@ -8,7 +8,7 @@
 #include "nAryTree.h"
 #include "global.h"
 #include "freeList.h"
-void movefile ( char *P1, char *P2)
+void v_movefile ( char *P1, char *P2)
 {
   /* P1 is source file path with file name and P2 is the destination file path */
     struct nAryTreeNode *narysource= NULL;
@@ -19,7 +19,7 @@ void movefile ( char *P1, char *P2)
     struct nAryTreeNode *newNode;
      
     FILE *fpVfs = NULL;
-
+	int i_inodeNo,i_retVal;
   
     
     
@@ -42,7 +42,7 @@ void movefile ( char *P1, char *P2)
              {  
                  
             
-             narysource=s_searchNAryTreeNode(narysource,token);
+             narysource=s_searchNAryTreeNode(narysource,token,NONRECURSIVE);
 
               if(NULL==narysource)
                  {   
@@ -60,19 +60,19 @@ void movefile ( char *P1, char *P2)
 
 
 /* Validating the destination directory path given and also creating directory in the process if it does not exist */
-             token=strtok(ndirdest,"/");
+             token=strtok (destinationPath,"/");
              while(token!=NULL)
              {  
                  
              i_noOfCharacters=strlen(token)+1;
-             narydest=s_searchNAryTreeNode(narydest,token);
+             narydest=s_searchNAryTreeNode(narydest,token,NONRECURSIVE);
 
               if(NULL==narydest)
                  {   
                      strncpy(parentPath,P1,i_noOfCharacters);
                      strcpy(parentPath,"/0");
 		     makedir (parentPath,token);      
-                     narydest=s_searchNAryTreeNode(narydest,token);
+                     narydest=s_searchNAryTreeNode(narydest,token,NONRECURSIVE);
                                      
                     }
                  
@@ -98,9 +98,9 @@ void movefile ( char *P1, char *P2)
 
 
 
-FILE *fpVfs;
+
 /* Opening the file System in the write mode to write the filePath to the existing file filedescriptor block*/
- 	if((fpVfs = fopen(vfsLabel,"wb+")) == NULL){                                         /*check*/
+ 	if((fpVfs = fopen("demo","wb+")) == NULL){                                         /*check*/
  	        printf("ERROR: Cannot Open the File System \n");
  	        printf("STATUS: Program Terminated \n");
  	        exit(1);
@@ -116,7 +116,7 @@ FILE *fpVfs;
 
     }
 
-     romovefile(P1);
+     removefile(P1);
      newNode=s_createNAryTreeNode(i_inodeNo,fpVfs);
      
      sPtr_rootNAryTree=s_insertNAryTreeNode(narydest,newNode);
