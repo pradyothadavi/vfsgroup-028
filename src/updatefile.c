@@ -85,7 +85,7 @@ if((fpVfs = fopen("demo","wb+")) == NULL){                                      
 
               if(NULL==nary1)
                  {   
-                     printf("dsetination file path not found");
+                     printf("destination file path not found");
                                      
                     }
                  

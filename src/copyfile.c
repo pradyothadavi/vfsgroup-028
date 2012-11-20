@@ -42,7 +42,7 @@ void copyfile ( char *P1, char *P2)
              {  
                  
             
-             narysource=s_searchNAryTreeNode(narysource,token);
+             narysource=s_searchNAryTreeNode(narysource,token,NONRECURSIVE);
 
               if(NULL==narysource)
                  {   
@@ -60,19 +60,19 @@ void copyfile ( char *P1, char *P2)
 
 
 /* Validating the destination directory path given and also creating directory in the process if it does not exist */
-             token=strtok(ndirdest,"/");
+             token=strtok(destinationPath,"/");
              while(token!=NULL)
              {  
                  
              i_noOfCharacters=strlen(token)+1;
-             narydest=s_searchNAryTreeNode(narydest,token);
+             narydest=s_searchNAryTreeNode(narydest,token,NONRECURSIVE);
 
               if(NULL==narydest)
                  {   
                      strncpy(parentPath,P1,i_noOfCharacters);
                      strcpy(parentPath,"/0");
 		     makedir (parentPath,token);      
-                     narydest=s_searchNAryTreeNode(narydest,token);
+                     narydest=s_searchNAryTreeNode(narydest,token,NONRECURSIVE);
                                      
                     }
                  
